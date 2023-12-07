@@ -1,0 +1,169 @@
+* {
+    margin:0;
+    padding:0;
+    background: #171717;
+    color: #FFFFFF;
+    z-index:1;
+}
+
+a {
+    text-decoration: none;
+}
+html {
+    scroll-behavior: smooth;
+}
+body {
+overflow-x:hidden;
+}
+
+@font-face {
+    font-family: "Cairo Bold";
+    src: url("/fonts/Cairo/Cairo-Bold.ttf") format("truetype");
+    unicode-range: U+000-5FF;
+}
+@font-face {
+    font-family: "Cairo SemiBold"; 
+    src: url("/fonts/Cairo/Cairo-SemiBold.ttf") format("truetype");
+    unicode-range: U+000-5FF;
+}
+@font-face {
+    font-family: "Cairo Medium"; 
+    src: url("/fonts/Cairo/Cairo-Medium.ttf") format("truetype");
+    unicode-range: U+000-5FF;
+}
+@font-face {
+    font-family: "AdventPro";
+    src: url("/fonts/AdventPro/AdventPro-Medium.ttf") format("truetype");
+}
+@font-face {
+    font-family: "AdventPro-SemiBold";
+    src: url("/fonts/AdventPro/AdventPro-SemiBold.ttf") format("truetype");
+}
+
+/*Component CSS*/
+.orb {
+    width:595px;
+    height:595px;
+    border-radius:100%;
+    position:absolute;
+    background: radial-gradient(
+        circle at 50% 50%, 
+        #A60164 0.00%, 
+        rgba(198, 1, 193, 0.4275) 66.15%,
+        rgba(219, 0, 255, 0.60) 100%);
+    filter: blur(20px);
+    z-index:0;
+}
+
+.container {
+    background:rgba(255, 255, 255, 0.10);
+    padding:10px;
+    border-radius:40px;
+}
+/*Parts of the website*/
+
+.intro {
+    height:100vh;
+}
+.intro .title {
+    position:absolute;
+    top:185px;
+    left:1175px;
+}
+.title h1 {
+font-family:"AdventPro-SemiBold";
+    font-size: 64px;
+    line-height: 64px;
+}
+.intro .title h2 {
+font-family:"Cairo Medium";
+    font-size: 32px;
+    line-height: 32px;
+    margin-left:8px;
+}
+
+.intro .nav {
+    position:absolute;
+    top:543px;
+    left:97px;
+    display:flex;
+    line-height: 48px;
+    flex-direction: column;
+    font-family: "Cairo Medium";
+    font-size: 32px;
+    background:rgba(219, 0, 255, 0.00);
+}
+.intro .nav a {
+    background:rgba(0, 0, 0, 0.00);
+}
+.intro .orb {
+    left:274px;
+    top:543px;
+    border-radius:100%;
+}
+.about-me {
+    position:absolute;
+    top:1080px;
+    height:1080px;
+}
+
+.about-me .title h1{
+    width:265px;
+    position:absolute;
+    top:171px;
+    left:102px;
+}
+
+
+.about-me .paragraph{
+    position:absolute;
+    top:250px;
+    left:102px;
+    font-size:28px;
+    line-height:30px;
+    text-align:justify;
+    text-justify:inter-cluster;
+    font-family:"AdventPro";
+    width:534px;
+}
+
+.about-me .container {
+    width:558px;
+    height:558px; 
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    position:absolute;
+    top:100px;
+    left:1096px;
+    font-size:24px;
+    line-height:24px;
+    padding:40px;
+}
+.about-me .container *{
+    background:rgba(255, 255, 255, 0.0);
+    margin-bottom:8px;
+}
+
+.about-me .container .subset{
+    width:136px;
+    font-family:"Cairo Medium";
+    height:300px;
+}
+.about-me .container .subset .title{
+    font-family:"Cairo Bold";
+    height:36px;
+}
+.about-me .orb {
+    left:1432px;
+    top:250px;
+}
+.experience {
+    position:absolute;
+    top:2160px;
+    height:1080px;
+}
+.experience .container .skills .subset{
+    background:rgba(255, 255, 255, 0.0);
+    padding:10px;
+}
