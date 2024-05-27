@@ -1,0 +1,17 @@
+<style scoped>
+.body {
+    margin-left:30%;
+    margin-right:30%;
+    font-weight:500;
+}
+</style>
+<div class="body">
+    <div id="hero" ></div>
+    <div id="work_experience"></div>
+</div>
+<script>
+    onMount(async() => {
+        insertContent(await getContent("/components/index/hero.html"), "hero" )
+        insertContent(await getContent("/components/index/work_experience.html"), "work_experience" )
+    })
+</script>

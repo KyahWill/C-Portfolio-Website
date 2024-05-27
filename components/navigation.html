@@ -1,0 +1,57 @@
+<style scoped>
+.navigation_container {
+    display:flex;
+    flex-direction:row;
+    height:5rem;
+    padding-left: 30%;
+    padding-right: 30%;
+
+    border-bottom-color: #fff;
+    border-bottom-style:solid;
+    border-bottom-width:1px;
+    align-items:center;
+}
+
+.navigation_container .header {
+    font-size:1.5rem;
+    line-height:1.5rem;
+    margin-right:auto;
+}
+.navigation_container .header p {
+    font-family:Helvetica ;
+    font-weight:700 ;
+}
+.nav_item {
+    padding-left:1rem;
+    font-size:1.25rem;
+    font-weight:600;
+    transition-duration:150ms;
+    transition-timing-function: ease-in-out;
+    height:100%;
+}
+
+.nav_buttons {
+    display:flex;
+    flex-direction:row;
+    justify-content: end;
+    align-items:center;
+}
+
+.nav_item:hover{
+    font-size:1.5rem;
+}
+</style>
+<div class="navigation_container">
+    <div class="header">
+	<p>Home</p>
+    </div>
+    <div class="nav_buttons">
+	<p class="nav_item">Blogs</p>
+	<p class="nav_item">Projects</p>
+	<p class="nav_item">Resume</p>
+    </div>
+</div>
+<script>
+
+</script>
+

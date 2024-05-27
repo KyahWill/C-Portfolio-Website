@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<title>Will Vincent L. Parrone</title>
+	<link rel="icon" type="image/x-icon" href="/images/favicon.png">
+	<style>
+	    * {
+	    margin:0;
+	    padding:0;
+	    font-family:Helvetica, Arial,  sans-serif;
+	    }
+	    .dev {
+		border-style:solid;
+		border-width:1px;
+		border-color:red;
+	    }
+	</style>
+	<!-- <link rel="stylesheet"  href="/index.css" /> -->
+    </head>
+    <body>
+	<nav id="nav_main" />
+	<main id="body_main" />
+    </body>
+    <script>
+    const insertContent = ( content,component_id) =>{
+	console.log(content)
+	document.getElementById(component_id).innerHTML =  content
+    }
+    const getContent = async (address) => {
+	const response = await fetch(address)
+	return await response.text();
+    }
+    const onMount = async() => {
+	insertContent(await getContent("/components/body.html"), "body_main" )
+	insertContent(await getContent("/components/navigation.html"), "nav_main" )
+    }
+
+    onMount()
+    </script>
+</html>

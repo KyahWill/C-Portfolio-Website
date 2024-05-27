@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<title>Will Vincent L. Parrone</title>
+	<link rel="icon" type="image/x-icon" href="/images/favicon.png">
+	<link rel="stylesheet"  href="/index.css" /> 
+    </head>
+    <body>
+	<nav id="nav_main"></nav>
+	<main id="body_main"></main>
+    </body>
+    <script defer>
+    const insertContent = ( content,component_id) =>{
+	let doc = document.createRange().createContextualFragment(content)
+	document.getElementById(component_id).appendChild(doc)
+	//document.getElementById(component_id).innerHTML =  content
+	//let doc = new DOMParser().parseFromString(content, "text/html");	
+
+	const script = doc.querySelector("script")
+	if(script){
+	    eval(script[0].innerHTML)
+	}
+	
+    }
+    const getContent = async (address) => {
+	const response = await fetch(address)
+	return await response.text();
+    }
+    const onMount = async(callback) => {
+	await callback()
+    }
+    onMount(async()=>{
+        insertContent(await getContent("/components/index_body.html"), "body_main" )
+        insertContent(await getContent("/components/navigation.html"), "nav_main" )
+    })
+    </script>	
+</html>

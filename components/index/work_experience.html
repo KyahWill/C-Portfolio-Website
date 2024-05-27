@@ -1,0 +1,67 @@
+<style>
+    .work .title {
+	font-size:2rem;
+	font-weight:700;
+    }
+
+
+</style>
+<br>
+<br>
+<div class="work" id="work">
+    <p class="title"> WORK EXPERIENCE </p>
+    <br>
+
+</div>
+<script>
+const workExperience = [
+    {
+	title:"Junior Software Engineer",
+	company:"Sermonshots",
+	dateEmployed:"September 2023 - April 2024",
+	jobDescription:`Helps the development team with creating frontend components for a church-focused video-clipping & transcription service website.`,
+    },
+    {
+	title:"Business Analyst",
+	company:"Tribe",
+	dateEmployed:"July 2023 - September 2023",
+	jobDescription:``,
+    },
+    {
+	title:"Junior Business Analyst",
+	company:"Halcyon Agile",
+	dateEmployed:"SEPTEMBER 2023 - Onwards",
+	jobDescription:`Assisted in communicating with clients while taking the tasks of a project manager for 3+ web projects. under direct supervision of the Team Lead. Identifies customer needs and wants and creates specifications, via charts or diagrams when deemed necessary.Holds a similar role as the product owner during the development phase.
+`,
+    },
+    {
+	title:"Junior Software Engineer/ Business Analyst",
+	company:"Ethos Bytes",
+	dateEmployed:"June 2020 - July 2021",
+	jobDescription:`Acted as a developer to temporarily increase development speed by 20% to meet deadlines. Acted as the scrum master for  a team of 3 developers. Assisted the development team with manual testing of the project. Serves as the liaison between the development team and the clients
+`,
+    },
+]
+
+onMount(async() => {
+    const content = await getContent("/components/index/work_block.html")
+    const doc = document.createRange().createContextualFragment(content)
+    const style = doc.querySelector("style")
+    document.getElementById("work").appendChild(style)
+    const raw_node = doc.querySelector(".work_block")
+
+	
+    workExperience.forEach((item)=>{
+	console.log(item.title)
+
+	let newDoc = raw_node.cloneNode(deep=true) 
+	    newDoc.querySelector(".company").innerHTML = item.company
+	    newDoc.querySelector(".position").innerHTML = item.title
+	    newDoc.querySelector(".date").innerHTML = item.dateEmployed
+	    newDoc.querySelector(".description").innerHTML = item.jobDescription
+	document.getElementById("work").appendChild(newDoc)
+    })
+
+})
+
+</script>
