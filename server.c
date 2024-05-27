@@ -17,7 +17,8 @@
 #define PORT 8080
 #define BUFFER_SIZE 104857600
 
-hash_table* mime_types = {0} ;
+hash_table* mime_types = {0};
+hash_table* routes = {0};
 
 
 void create_mime_types(){
@@ -28,7 +29,13 @@ void create_mime_types(){
     hash_table_set(mime_types, "jpeg",   "image/jpeg");
     hash_table_set(mime_types, "png",    "image/png");
     hash_table_set(mime_types, "css",    "text/css");
-    hash_table_set(mime_types, "js",     "text/js");
+    hash_table_set(mime_types, "js",     "text/javascript");
+}
+
+void create_routes(){
+    routes = hash_table_create();
+    hash_table_set(routes, "",   "routes/index.html");
+    hash_table_set(routes, "blogs",   "routes/blogs.html");
 }
 
 void post_error(char* error) {
@@ -57,8 +64,6 @@ char *url_decode(const char *src) {
     char *decoded = malloc(src_len + 1);
     size_t decoded_len = 0;
 
-    printf("SRC %s\n",src);
-
     // decode %2x to hex
     for (size_t i = 0; i < src_len; i++) {
         if (src[i] == '%' && i + 2 < src_len) {
@@ -80,7 +85,8 @@ char *url_decode(const char *src) {
 void build_http_response(const char *file_name,
 			 const char *file_ext,
 			 char *response,
-			 size_t *response_len){
+			 size_t *response_len)
+{
     const char *mime_type = get_mime_type(file_ext);
     char *header = (char *)malloc(BUFFER_SIZE * sizeof(char));
     snprintf(header, BUFFER_SIZE , 
@@ -117,6 +123,7 @@ void build_http_response(const char *file_name,
     free(header);
     close(file_fd);
 }
+
 void *handle_client(void *arg) {
     int client_fd = *((int *)arg);
     char *buffer = (char *)malloc(BUFFER_SIZE * sizeof(char));
@@ -134,7 +141,7 @@ void *handle_client(void *arg) {
             buffer[matches[1].rm_eo] = '\0';
             const char *url_encoded_file_name = buffer + matches[1].rm_so;
 
-            printf("URL: %s\n",url_encoded_file_name);
+            //printf("URL: %s\n",url_encoded_file_name);
             char *file_name = url_decode(url_encoded_file_name);
 
             // get file extension
@@ -144,12 +151,9 @@ void *handle_client(void *arg) {
             // build HTTP response
             char *response = (char *)malloc(BUFFER_SIZE * 2 * sizeof(char));
             size_t response_len;
-
-            if(strcmp(file_name,"")==0) {
-                build_http_response("index.html", "html", response, &response_len);
-            }
-            else if(strcmp(file_name,"projects")==0) {
-                build_http_response("index.html", "html", response, &response_len);
+            const char* route = hash_table_get(routes, file_name);
+            if(route != NULL){
+                build_http_response(route, "html", response, &response_len);
             }
             else {
                 build_http_response(file_name, file_ext, response, &response_len);
@@ -173,10 +177,9 @@ void *handle_client(void *arg) {
 void handle_server() {
     int server_fd;
     struct sockaddr_in server_addr;
-
     if ((server_fd = socket(AF_INET, SOCK_STREAM,0) ) < 0) {
+        perror("SOCKET FAILED");
     }
-
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = htons(PORT);
@@ -197,9 +200,6 @@ void handle_server() {
         post_error("Listened FAILED");
     }
 
-    
-
-
     while(1) {
 	struct sockaddr_in client_addr;
 	socklen_t client_addr_len = sizeof(client_addr);
@@ -210,21 +210,20 @@ void handle_server() {
 	    perror("ACCEPT FAILED");
 	    continue; 
 	}
-
 	pthread_t thread_id;
         /*This function creates  a separate thread that handles the client separately here.*/
 	pthread_create(&thread_id,NULL, handle_client, (void *)client_fd);
 	pthread_detach(thread_id);
-
+        //free(client_fd);
     }
-
     close(server_fd);
 }
 
-
 int main(void)
 {
+        printf("SERVER RUNNING ON PORT 8080");
         create_mime_types();
+        create_routes();
 	handle_server();
 	return EXIT_SUCCESS;
 }

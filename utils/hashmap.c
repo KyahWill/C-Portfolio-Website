@@ -36,8 +36,7 @@ hash_table* hash_table_create(void) {
     }
     return table;
 }
-const char* hash_table_set_entry(hash_table_entry* entries, size_t capacity,
-        const char* key, void* value, size_t* plength) {
+const char* hash_table_set_entry(hash_table_entry* entries, size_t capacity, const char* key, void* value, size_t* plength) {
     // AND hash with capacity-1 to ensure it's within entries array.
     uint64_t hash = hash_key(key);
     size_t index = (size_t)(hash & (uint64_t)(capacity - 1));
@@ -87,7 +86,7 @@ bool hash_table_expand(hash_table* table) {
         hash_table_entry entry = table->entries[i];
         if (entry.key != NULL) {
             hash_table_set_entry(new_entries, new_capacity, entry.key,
-                         entry.value, NULL);
+                         (void *)entry.value, NULL);
         }
     }
 
@@ -127,7 +126,7 @@ const char* hash_table_get(hash_table* table, const char* key) {
     // AND hash with capacity-1 to ensure it's within entries array.
     uint64_t hash = hash_key(key);
     size_t index = (size_t)(hash & (uint64_t)(table->capacity - 1));
-
+    printf("Key: %s", key);
     // Loop till we find an empty entry.
     while (table->entries[index].key != NULL) {
         if (strcmp(key, table->entries[index].key) == 0) {

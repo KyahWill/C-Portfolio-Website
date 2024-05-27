@@ -1,4 +1,25 @@
-const workExperience = [
+const insertContent = ( content,component_id) =>{
+    document.getElementById(component_id).innerHTML =  content
+    let doc = new DOMParser().parseFromString(content, "text/html");	
+    const script = doc.getElementsByTagName("script")
+    if(script.length != 0){
+	eval(script[0].innerHTML)
+    }
+    
+}
+const getContent = async (address) => {
+    const response = await fetch(address)
+    return await response.text();
+}
+const onMount = async(callback) => {
+    console.log("TEST")
+    await callback()
+}
+
+/** 
+ *
+ *
+ * const workExperience = [
     {
 	title:"Software Engineer",
 	company:"Sermonshots",
@@ -63,4 +84,4 @@ const orgExperience = [
 	jobDescription:"did a thing here",
     },
 ]
-
+*/
