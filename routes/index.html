@@ -3,13 +3,29 @@
     <head>
 	<title>Will Vincent L. Parrone</title>
 	<link rel="icon" type="image/x-icon" href="/images/favicon.png">
-	<link rel="stylesheet"  href="/index.css" /> 
+	<style>
+	    * {
+		margin:0;
+		padding:0;
+		font-family:Arial;
+		color:#111716;
+	    }
+	    .dev {
+		border-style:solid;
+		border-width:1px;
+		border-color:red;
+	    }
+
+	    body {
+		background-color:#effefc;
+	    }
+	</style>
     </head>
     <body>
 	<nav id="nav_main"></nav>
 	<main id="body_main"></main>
     </body>
-    <script defer>
+    <script>
     const insertContent = ( content,component_id) =>{
 	let doc = document.createRange().createContextualFragment(content)
 	document.getElementById(component_id).appendChild(doc)
