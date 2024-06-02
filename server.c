@@ -15,7 +15,7 @@
 #include "utils/routes.c"
 
 #define EXIT_SUCCESS 0
-#define PORT 8080
+#define PORT 2130
 #define BUFFER_SIZE 104857600
 
 hash_table* mime_types = {0};
@@ -310,7 +310,7 @@ void handle_server() {
 
 int main(void)
 {
-        printf("SERVER RUNNING ON PORT 8080\n");
+        printf("SERVER RUNNING ON PORT 2130\n");
         create_mime_types();
         printf("MINE_TYPE CREATED\n");
         create_routes();
