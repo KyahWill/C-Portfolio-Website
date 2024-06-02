@@ -3,6 +3,7 @@
     <head>
 	<title>Will Vincent L. Parrone</title>
 	<link rel="icon" type="image/x-icon" href="/images/favicon.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style>
 	    * {
 		margin:0;
@@ -29,9 +30,6 @@
     const insertContent = ( content,component_id) =>{
 	let doc = document.createRange().createContextualFragment(content)
 	document.getElementById(component_id).appendChild(doc)
-	//document.getElementById(component_id).innerHTML =  content
-	//let doc = new DOMParser().parseFromString(content, "text/html");	
-
 	const script = doc.querySelector("script")
 	if(script){
 	    eval(script[0].innerHTML)
