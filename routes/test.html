@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<title>Will Vincent L. Parrone</title>
+	<link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    </head>
+    <body>
+	<main id="body_main"></main>
+    </body>
+    <script defer>
+    const insertContent = ( content,component_id) =>{
+	let doc = document.createRange().createContextualFragment(content)
+	document.getElementById(component_id).appendChild(doc)
+	const script = doc.querySelector("script")
+	if(script){
+	    eval(script[0].innerHTML)
+	}
+	return true;
+    }
+    const getContent = async (address) => {
+	const response = await fetch(address)
+	return await response.text();
+    }
+    const onMount = async(callback) => {
+	await callback()
+	return true;
+    }
+    onMount(async()=>{
+        insertContent(await getContent("/components/test/newBody.html"), "body_main" )
+    })
+    </script>	
+</html>
