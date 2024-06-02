@@ -4,6 +4,10 @@
 	font-weight:700;
     }
 
+    .project .title {
+	font-size:2rem;
+	font-weight:700;
+    }
 
 </style>
 <br>
@@ -12,6 +16,11 @@
     <p class="title"> WORK EXPERIENCE </p>
     <br>
 
+</div>
+<div class="project" id="project">
+    <p class="title"> PROJECTS </p>
+    <br>
+    
 </div>
 <script>
 const workExperience = [
@@ -31,35 +40,103 @@ const workExperience = [
 	title:"Junior Business Analyst",
 	company:"Halcyon Agile",
 	dateEmployed:"SEPTEMBER 2023 - Onwards",
-	jobDescription:`Assisted in communicating with clients while taking the tasks of a project manager for 3+ web projects. under direct supervision of the Team Lead. Identifies customer needs and wants and creates specifications, via charts or diagrams when deemed necessary.Holds a similar role as the product owner during the development phase.
-`,
+	jobDescription:`Assisted in communicating with clients while taking the tasks of a project manager for 3+ web projects. under direct supervision of the Team Lead. Identifies customer needs and wants and creates specifications, via charts or diagrams when deemed necessary.Holds a similar role as the product owner during the development phase.`,
     },
     {
 	title:"Junior Software Engineer/ Business Analyst",
 	company:"Ethos Bytes",
 	dateEmployed:"June 2020 - July 2021",
-	jobDescription:`Acted as a developer to temporarily increase development speed by 20% to meet deadlines. Acted as the scrum master for  a team of 3 developers. Assisted the development team with manual testing of the project. Serves as the liaison between the development team and the clients
-`,
+	jobDescription:`Acted as a developer to temporarily increase development speed by 20% to meet deadlines. Acted as the scrum master for  a team of 3 developers. Assisted the development team with manual testing of the project. Serves as the liaison between the development team and the clients`,
+    },
+]
+
+const projectList = [
+    {
+	title:"Thus Website",
+	stack:["SvelteKit","Tailwind","Typescript","Strapi", "Vercel", "Nginx"],
+	description:"A news website made in Svelte & Sveltekit",
+	githubLink:"",
+	siteLink:"www.thus.ph",
+    },
+    {
+	title:"C Portfolio Website",
+	stack:["C", "HTML","CSS", "Javascript", "Nginx"],
+	description:"A portfolio website made with C and basic html css and javascript",
+	githubLink:"https://www.willvincentparrone.dev",
+	siteLink:"https://github.com/KyahWill/C-Portfolio-Website",
+    },
+    {
+	title:"Flufluent",
+	stack:["SvelteKit", "Wordpress", "Flask", "Nginx"],
+	description:"",
+	githubLink:"",
+	siteLink:"https://www.flufluent.com",
+    },
+    {
+	title:"Rust Legal Terminology Parser",
+	stack:["Rust"],
+	description:"https://github.com/KyahWill/sandigan_model",
+	githubLink:"",
+	siteLink:"",
+    },
+    {
+	title:"Python Computer Usage Limiter",
+	stack:["Python", "Tkinter"],
+	description:"A dogfood project made to limit computer usage and allow for pomodoro timing.",
+	githubLink:"https://github.com/KyahWill/computer_limiter",
+	siteLink:"",
     },
 ]
 
 onMount(async() => {
-    const content = await getContent("/components/index/work_block.html")
-    const doc = document.createRange().createContextualFragment(content)
-    const style = doc.querySelector("style")
-    document.getElementById("work").appendChild(style)
-    const raw_node = doc.querySelector(".work_block")
+    const work_block = await getContent("/components/index/work_block.html")
+    const work_fragment = document.createRange().createContextualFragment(work_block)
+
+    const project_block = await getContent("/components/index/project_block.html")
+    const project_fragment = document.createRange().createContextualFragment(project_block)
+
+    const work_style = work_fragment.querySelector("style")
+    const project_style = project_fragment.querySelector("style")
+    document.getElementById("work").appendChild(work_style)
+    document.getElementById("project").appendChild(project_style)
+    const work_node = work_fragment.querySelector(".work_block")
+    const project_node= project_fragment.querySelector(".project_block")
 
 	
     workExperience.forEach((item)=>{
-	console.log(item.title)
 
-	let newDoc = raw_node.cloneNode(deep=true) 
+	let newDoc = work_node.cloneNode(deep=true) 
 	    newDoc.querySelector(".company").innerHTML = item.company
 	    newDoc.querySelector(".position").innerHTML = item.title
 	    newDoc.querySelector(".date").innerHTML = item.dateEmployed
 	    newDoc.querySelector(".description").innerHTML = item.jobDescription
 	document.getElementById("work").appendChild(newDoc)
+    })
+    projectList.forEach((item)=>{
+	console.log(item.title)
+	let newDoc = project_node.cloneNode(deep=true) 
+	    newDoc.querySelector(".title").innerHTML = item.title
+	    
+	newDoc.querySelector(".description").innerHTML = item.description
+	item.stack.forEach((stack)=>{
+	    let paragraph = document.createElement('p')
+	    paragraph.innerHTML = stack
+	    newDoc.querySelector(".stack").appendChild(paragraph)
+	})
+
+	if(item.githubLink!= ""){
+	    let anchor = document.createElement('a');
+	    anchor.href=item.githubLink
+	    anchor.innerHTML="See Github"
+	    newDoc.querySelector(".msc").appendChild(anchor)
+	}
+	if(item.siteLink!= ""){
+	    let anchor = document.createElement('a');
+	    anchor.href=item.siteLink
+	    anchor.innerHTML="See Website"
+	    newDoc.querySelector(".msc").appendChild(anchor)
+	}
+	document.getElementById("project").appendChild(newDoc)
     })
 
 })

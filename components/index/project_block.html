@@ -1,0 +1,65 @@
+<style>
+.project_block {
+    padding:1.25rem;
+    border-style:solid;
+    border-width:2px;
+    border-radius: 1rem;
+    margin-bottom:1rem;
+}
+
+.project_block .title {
+    font-size:1.25rem;
+    font-weight:700;
+} 
+
+.project_block .description {
+    margin-top:0.25rem;
+    font-size:1rem
+} 
+
+.project_block .container .stack {
+    display:flex;
+    flex-direction:row;
+    font-size:.75rem;
+    flex-wrap:wrap;
+} 
+.project_block .container .stack p{
+    margin-right:0.75rem;
+} 
+.project_block  .stack_title{
+    font-size:.75rem;
+    font-weight:700;
+} 
+
+.project_block .container {
+    display:flex;
+    flex-direction:row;
+}
+
+.project_block .container .column{
+    flex:1;
+}
+.project_block .container .msc{
+    display:flex;
+    flex-direction:grow;
+    
+}
+.msc .extend {
+    flex:1;
+}
+.msc a {
+    margin-left:0.5rem;
+}
+</style>
+<div class="project_block">
+    <div class="title"></div>
+    <div class="description"></div>
+    <br >    
+    <p><span class="stack_title">Stack</span></p>
+    <div class="container">
+        <div class="stack column"></div>
+        <div class="msc column">
+            <div class="extend"></div>
+        </div>
+    </div>
+</div>

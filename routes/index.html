@@ -20,7 +20,7 @@
 	if(script){
 	    eval(script[0].innerHTML)
 	}
-	
+	return true;
     }
     const getContent = async (address) => {
 	const response = await fetch(address)
@@ -28,6 +28,7 @@
     }
     const onMount = async(callback) => {
 	await callback()
+	return true;
     }
     onMount(async()=>{
         insertContent(await getContent("/components/index_body.html"), "body_main" )

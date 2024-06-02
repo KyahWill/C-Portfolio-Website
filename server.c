@@ -12,13 +12,14 @@
 #include <pthread.h>
 #include <regex.h>
 #include "utils/hashmap.c"
+#include "utils/routes.c"
 
 #define EXIT_SUCCESS 0
 #define PORT 8080
 #define BUFFER_SIZE 104857600
 
 hash_table* mime_types = {0};
-hash_table* routes = {0};
+route_table* routes = {0};
 
 
 void create_mime_types(){
@@ -33,9 +34,54 @@ void create_mime_types(){
 }
 
 void create_routes(){
-    routes = hash_table_create();
-    hash_table_set(routes, "",   "routes/index.html");
-    hash_table_set(routes, "blogs",   "routes/blogs.html");
+    printf("CREATE_ROUTE: \n");
+     routes = route_table_create();
+
+    route* index = malloc(sizeof(route));
+    index->template="routes/index.html";
+    index->base="";
+    index->route_type=STATIC;
+   
+    route* blogs = malloc(sizeof(route));
+    blogs->template="routes/blogs.html",
+    blogs->route_type=STATIC,
+    blogs->base="blogs";
+    
+    route* blog = malloc(sizeof(route));
+    blog->template="routes/blog.html",
+    blog->route_type=DYNAMIC,
+    blog->base="blog";
+
+    printf("set ROUTE: %s\n",index->base);
+    //printf("set ROUTE: %s\n",blogs.base);
+    printf("set ROUTE: %s\n",blog->base);
+    route_table_set(routes,index->base, index);
+    //route_table_set(routes,blogs.base, &blogs);
+    route_table_set(routes,blog->base, blog);
+}
+
+route* get_route(char* url){
+    char base[32] = ""; 
+    int i = 0;
+    printf("URL: %s\n",url);
+    char* p = &url[0];
+    while(*p != '\0') {
+        printf("%c\n",url[i]);
+        if(*p != '/'){
+            base[i] = *p;
+        } 
+        else {
+            base[i] = '\0';
+            break;
+        }
+        //process the current char
+        ++p; 
+        i++;
+    }
+
+    printf("FINAL LETTER: %c",url[i]);
+    printf("GET ROUTE: %s",base);
+    return route_table_get(routes, base);
 }
 
 void post_error(char* error) {
@@ -123,6 +169,47 @@ void build_http_response(const char *file_name,
     free(header);
     close(file_fd);
 }
+void build_route_response(route *route,
+			 const char *file_ext,
+			 char *response,
+			 size_t *response_len)
+{
+    const char *mime_type = get_mime_type(file_ext);
+    char *header = (char *)malloc(BUFFER_SIZE * sizeof(char));
+    snprintf(header, BUFFER_SIZE , 
+	     "HTTP/1.1 200 OK\r\n"
+	     "Content-Type: %s\r\n"
+	     "\r\n",
+	     mime_type
+    );
+
+    int file_fd = open(route->template, O_RDONLY); if(file_fd == -1 ) {
+	snprintf(response, BUFFER_SIZE , 
+		 "HTTP/1.1 404 Not Found\r\n"
+		 "Content-Type: text/plain\r\n"
+		 "\r\n"
+		 "404 Not Found"
+	);
+	*response_len = strlen(response);
+	return;
+    }
+    struct stat file_stat;
+    fstat(file_fd, &file_stat);
+    off_t file_size = file_stat.st_size;
+    *response_len = 0;
+    memcpy(response, header, strlen(header));
+    *response_len += strlen(header);
+
+
+    ssize_t bytes_read;
+    while ((bytes_read = read(file_fd,
+			      response + *response_len,
+			      BUFFER_SIZE - *response_len)) > 0 ){
+	*response_len += bytes_read;
+    }
+    free(header);
+    close(file_fd);
+}
 
 void *handle_client(void *arg) {
     int client_fd = *((int *)arg);
@@ -151,9 +238,11 @@ void *handle_client(void *arg) {
             // build HTTP response
             char *response = (char *)malloc(BUFFER_SIZE * 2 * sizeof(char));
             size_t response_len;
-            const char* route = hash_table_get(routes, file_name);
+            //const char* route = hash_table_get(routes, file_name);
+            route* route = get_route(file_name);
             if(route != NULL){
-                build_http_response(route, "html", response, &response_len);
+                build_route_response(
+                route, "html", response, &response_len);
             }
             else {
                 build_http_response(file_name, file_ext, response, &response_len);
@@ -175,6 +264,7 @@ void *handle_client(void *arg) {
 }
 
 void handle_server() {
+    printf("START");
     int server_fd;
     struct sockaddr_in server_addr;
     if ((server_fd = socket(AF_INET, SOCK_STREAM,0) ) < 0) {
@@ -199,7 +289,7 @@ void handle_server() {
     if(listener == -1){
         post_error("Listened FAILED");
     }
-
+    printf("SOCKET CREATED");
     while(1) {
 	struct sockaddr_in client_addr;
 	socklen_t client_addr_len = sizeof(client_addr);
@@ -214,16 +304,18 @@ void handle_server() {
         /*This function creates  a separate thread that handles the client separately here.*/
 	pthread_create(&thread_id,NULL, handle_client, (void *)client_fd);
 	pthread_detach(thread_id);
-        //free(client_fd);
     }
     close(server_fd);
 }
 
 int main(void)
 {
-        printf("SERVER RUNNING ON PORT 8080");
+        printf("SERVER RUNNING ON PORT 8080\n");
         create_mime_types();
+        printf("MINE_TYPE CREATED\n");
         create_routes();
+        printf("ROUTES CREATED\n");
 	handle_server();
+        printf("` CREATED\n");
 	return EXIT_SUCCESS;
 }

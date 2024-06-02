@@ -14,8 +14,10 @@ server: $(OBJ)
 start:
 	./server
 
+debug:
+	$(CC) server.c -g && gdb a.out
 clean:
-	rm -rf *.o server *.tar.gz
+	rm -rf *.o server *.tar.gz *.out
 
 dist: tarball
 tarball: clean
