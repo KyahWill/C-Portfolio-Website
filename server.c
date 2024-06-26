@@ -34,8 +34,7 @@ void create_mime_types(){
 }
 
 void create_routes(){
-    printf("CREATE_ROUTE: \n");
-     routes = route_table_create();
+    routes = route_table_create();
 
     route* index = malloc(sizeof(route));
     index->template="routes/index.html";
@@ -52,9 +51,6 @@ void create_routes(){
     blog->route_type=DYNAMIC,
     blog->base="blog";
 
-    printf("set ROUTE: %s\n",index->base);
-    //printf("set ROUTE: %s\n",blogs.base);
-    printf("set ROUTE: %s\n",blog->base);
     route_table_set(routes,index->base, index);
     //route_table_set(routes,blogs.base, &blogs);
     route_table_set(routes,blog->base, blog);
@@ -63,10 +59,8 @@ void create_routes(){
 route* get_route(char* url){
     char base[32] = ""; 
     int i = 0;
-    printf("URL: %s\n",url);
     char* p = &url[0];
     while(*p != '\0') {
-        printf("%c\n",url[i]);
         if(*p != '/'){
             base[i] = *p;
         } 
@@ -79,8 +73,6 @@ route* get_route(char* url){
         i++;
     }
 
-    printf("FINAL LETTER: %c",url[i]);
-    printf("GET ROUTE: %s",base);
     return route_table_get(routes, base);
 }
 
@@ -124,7 +116,6 @@ char *url_decode(const char *src) {
 
     // add null terminator
     decoded[decoded_len] = '\0';
-    printf("Decoded %s \n",decoded);
     return decoded;
 }
 
@@ -310,12 +301,8 @@ void handle_server() {
 
 int main(void)
 {
-        printf("SERVER RUNNING ON PORT 2130\n");
         create_mime_types();
-        printf("MINE_TYPE CREATED\n");
         create_routes();
-        printf("ROUTES CREATED\n");
 	handle_server();
-        printf("` CREATED\n");
 	return EXIT_SUCCESS;
 }
